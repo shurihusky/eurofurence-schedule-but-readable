@@ -2,15 +2,16 @@
  * Calculates the end time based on the start time and duration.
  *
  * @param {string} startTime - The start time in the format 'HH:mm'.
- * @param {number} duration - The duration in minutes.
+ * @param {number} duration - The duration in the format 'HH:mm'.
  * @returns {string} The end time in the format 'HH:mm'.
  */
 function calculateEndTime(startTime, duration) {
   const [hours, minutes] = startTime.split(':').map(Number);
+  const [hoursDuration, minutesDuration] = duration.split(':').map(Number);
   const startDate = new Date();
   startDate.setHours(hours, minutes, 0, 0);
 
-  const endDate = new Date(startDate.getTime() + duration * 60000); // duration in milliseconds
+  const endDate = new Date(startDate.getTime() + hoursDuration * 60 * 60 * 1000 + minutesDuration * 60 * 1000);
 
   const endHours = endDate.getHours().toString().padStart(2, '0');
   const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
@@ -69,7 +70,9 @@ function getAvailableRooms(events) {
   events.forEach(event => {
     rooms.add(event.room);
   });
-  return Array.from(rooms);
+  let availableRooms = Array.from(rooms);
+  console.log("availableRooms", availableRooms);
+  return availableRooms;
 }
 
 
@@ -259,6 +262,8 @@ const groups = [
   { name: "Other", color: "#FF69B4" },
 ]
 
+const getWeekdayFromDate = (date) => new Date(date).toLocaleDateString('en-US', { weekday: 'short' })
+
 export {
   calculateEndTime,
   formatDuration,
@@ -275,4 +280,5 @@ export {
   getSimplerEventGrouping,
   getSimpleEventColors,
   groups,
+  getWeekdayFromDate,
 };

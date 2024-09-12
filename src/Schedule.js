@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { parseEventData, reboxDays } from './transform.js';
+import React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import {
@@ -17,32 +16,12 @@ import Box from '@mui/material/Box';
 import './schedule.css';
 import { Typography } from '@mui/material';
 
-const EventList = ({
+const Schedule = ({
   day,
   filteredGroups,
+  events,
 }) => {
-  const [events, setEvents] = useState(new Map());
-
-  useEffect(() => {
-    fetch('http://localhost:5001/fetch-events')
-      .then(response => response.json())
-      .then(pages => {
-        const allEvents = pages.map(pageHTML => {
-          return parseEventData(pageHTML);
-        }).flat();
-        let dayEvents = reboxDays(allEvents).get(day);
-        if (filteredGroups.length > 0) {
-          dayEvents = dayEvents.filter(event => filteredGroups.includes(getSimplerEventGrouping(event)));
-        }
-        setEvents(dayEvents);
-        console.log('Fetched event data:', reboxDays(allEvents).get(day));
-      }).catch(error => {
-        console.error('Error fetching event data:', error);
-      });
-
-    console.log("enriched", enrichBuildingResources(getAvailableRooms(events)))
-  }, [day, filteredGroups]);
-
+  console.log("in events", events);
   console.log("lol", enrichBuildingResources(getAvailableRooms(events)));
   return (
     <Box>
@@ -98,19 +77,18 @@ const EventList = ({
                   borderRadius: '5px',
                 }}>
                   <Box sx={{ textAlign: 'center' }}>
-                    {/* centered typography for title, bold. subtitle, cursive and cut if not enough space */}
                     <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{eventInfo.event.title}</Typography>
-                    {events[eventInfo.event.id] && <Typography variant="overline" sx={{ fontStyle: 'cursive', overflow: 'hidden', textOverflow: 'ellipsis' }}>{events[eventInfo.event.id].subtitle}</Typography>}
+                    {events[eventInfo.event.id].subtitle && <Typography variant="overline" sx={{ fontStyle: 'cursive', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '9px' }}>{events[eventInfo.event.id].subtitle}</Typography>}
                   </Box>
-                </Box>
+                </Box >
               );
             }}
           />
         }
-      </Box>
+      </Box >
     </Box >
   );
 
 };
 
-export default EventList;
+export default Schedule;

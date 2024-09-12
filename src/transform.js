@@ -1,10 +1,10 @@
-import { formatDuration, calculateEndTime, getPreviousDay } from './utils.js';
+import { formatDuration, calculateEndTime, getPreviousDay, getWeekdayFromDate } from './utils.js';
 
 /**
  * The base URL for event details.
  * @type {string}
  */
-const eventDetailsBaseUrl = "https://www.eurofurence.org/EF28/schedule/";
+const eventDetailsBaseUrl = "https://www.eurofurence.org/EF28/schedule/events/";
 
 /**
  * Parses the event data from the provided page HTML.
@@ -77,6 +77,65 @@ function parseEventData(pageHTML) {
   return events;
 }
 
+/**
+ * Parses the event data from the provided event XML.
+ * 
+ * @param {string} eventXML - The XNL content of the events.
+ * @returns {Array} - An array of event objects.
+ */
+function parseEventXMLData(eventXML) {
+  if (!eventXML || !eventXML.schedule) {
+    console.error('No event data found.');
+    return [];
+  }
+  const events = [];
+  let days = eventXML.schedule.day;
+  days.forEach(day => {
+    let dayName = getWeekdayFromDate(day.date[0]);
+
+    day.room.forEach(room => {
+      let roomName = room.name[0];
+
+      if (room.event) {
+        room.event.forEach(event => {
+          let eventId = event.id[0];
+          let link = eventDetailsBaseUrl + eventId + ".en.html";
+          let time = event.start[0];
+          let duration = event.duration[0];
+          let title = event.title[0];
+          let subtitle = event.subtitle ? event.subtitle[0] : '';
+          let description = event.description ? event.description[0] : '';
+          let type = event.type ? event.type[0] : '';
+          let track = event.track ? event.track[0] : '';
+          let endTime = calculateEndTime(time, duration);
+          let language = event.language ? event.language[0] : '';
+          let links = event.link ? event.link : [];
+          let speaker = event.persons ? event.persons?.[0]?.person?.[0]?._ : [];
+
+          events.push({
+            day: dayName,
+            time,
+            duration,
+            endTime,
+            room: roomName,
+            title,
+            description,
+            link,
+            subtitle,
+            speaker,
+            language,
+            type,
+            track,
+            links,
+          });
+        });
+      }
+    })
+  });
+
+  return events;
+}
+
 function reboxDays(allEvents) {
   const dayMap = new Map([
     ['Tue', []],
@@ -140,4 +199,4 @@ function reboxDays(allEvents) {
   return dayMap;
 }
 
-export { parseEventData, reboxDays };
+export { parseEventData, parseEventXMLData, reboxDays };

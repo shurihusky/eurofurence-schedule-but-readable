@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '@mui/material/Container';
+import { parseEventXMLData, reboxDays } from './transform.js';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -11,6 +12,7 @@ import GroupButtonGroup from './GroupButtonGroup';
 import {
   getSimplerEventGroupList,
   groups,
+  getWeekdayFromDate,
 } from './utils.js';
 
 const StyledTabs = styled((props) => (
@@ -56,27 +58,45 @@ function Copyright() {
         color: 'text.secondary',
       }}
     >
-      {'Information without guarantee, can contain mistakes from parsing the event website | Made with ❤️ by ShuriHusky | '}
+      {'Information without guarantee | Made with ❤️ by '}
+      <Link color="inherit" href="https://shurihusky.github.io/">
+        ShuriHusky
+      </Link>
+      {' | '}
       <Link color="inherit" href="https://github.com/shurihusky/eurofurence-schedule-but-readable/">
         Source Code
+      </Link>
+      {' | '}
+      <Link color="inherit" href="https://www.eurofurence.org/EF28/schedule/">
+        Official Schedule
       </Link>
     </Typography>
   );
 }
 
 const App = () => {
-  const [tab, setTab] = React.useState(0);
-  const [filteredGroups, setFilteredGroups] = React.useState(getSimplerEventGroupList());
+  const [tab, setTab] = useState(0);
+  const [filteredGroups, setFilteredGroups] = useState(getSimplerEventGroupList());
+  const [data, setData] = useState(null); // Raw unprocessed data
+  const [events, setEvents] = useState(null); // Processed data
 
-  // const handleChange = (event, newValue) => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   urlParams.set('tab', newValue);
-  //   window.location.search = urlParams.toString();
-  // };
+  useEffect(() => {
+    fetch('http://localhost:5001/fetch-events')
+      .then(response => response.json())
+      .then(data => {
+        console.log("data", data)
+        setData(data);
+        let parsedData = parseEventXMLData(data)
+        console.log("parsedData", parsedData)
+        let reboxedEvents = reboxDays(parsedData);
+        console.log("reboxedEvents", reboxedEvents)
+        setEvents(reboxedEvents);
+      }).catch(error => {
+        console.error('Error fetching event data:', error);
+      });
 
-  // useEffect(() => {
-  //   console.log("filteredGroups", filteredGroups);
-  // }, [filteredGroups]);
+    // console.log("enriched", enrichBuildingResources(getAvailableRooms(events)))
+  }, [filteredGroups]);
 
   const handleTabChange = (newValue) => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -106,12 +126,9 @@ const App = () => {
               onChange={(e, newValue) => handleTabChange(newValue)}
               aria-label="styled tabs example"
             >
-              <StyledTab label="Tue" />
-              <StyledTab label="Wed" />
-              <StyledTab label="Thu" />
-              <StyledTab label="Fri" />
-              <StyledTab label="Sat" />
-              <StyledTab label="Sun" />
+              {data && data?.schedule?.day.map((day, index) => (
+                <StyledTab key={index} label={getWeekdayFromDate(day.date)} />
+              ))}
             </StyledTabs>
             <GroupButtonGroup
               groups={groups}
@@ -119,12 +136,16 @@ const App = () => {
               setFilteredGroups={setFilteredGroups}
             />
             <Box>
-              {tab === 0 && <Schedule day="Tue" filteredGroups={filteredGroups} />}
-              {tab === 1 && <Schedule day="Wed" filteredGroups={filteredGroups} />}
-              {tab === 2 && <Schedule day="Thu" filteredGroups={filteredGroups} />}
-              {tab === 3 && <Schedule day="Fri" filteredGroups={filteredGroups} />}
-              {tab === 4 && <Schedule day="Sat" filteredGroups={filteredGroups} />}
-              {tab === 5 && <Schedule day="Sun" filteredGroups={filteredGroups} />}
+              {events && data && data?.schedule?.day.map((day, index) => (
+                <React.Fragment key={index}>
+                  {tab === index && <Schedule
+                    day={getWeekdayFromDate(day.date)}
+                    events={events.get(getWeekdayFromDate(day.date))}
+                    filteredGroups={filteredGroups}
+                  />
+                  }
+                </React.Fragment>
+              ))}
             </Box>
           </Box>
         </Box>
