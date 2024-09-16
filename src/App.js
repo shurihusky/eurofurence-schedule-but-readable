@@ -122,8 +122,9 @@ const App = () => {
 
   useEffect(() => {
     // console.log("Filtered Groups: ", filteredGroups);
-    // fetch('http://localhost:5001/fetch-events')
-    fetch('http://192.168.178.66:5001/fetch-events')
+    // fetch('http://localhost:3001/fetch-events')
+    fetch('https://schedcache.shuri.dev')
+      // fetch('http://192.168.178.66:5001/fetch-events')
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching event data');
@@ -247,6 +248,9 @@ const App = () => {
             The cutoff between dates is also shifted to make late night events appear on the same day.
             This version is optimized for readability and quick access to the most important information.
             Furthermore, it comes with a search function.
+            How it works behind the scenes can be found on the GitHub page.
+            Basically I am fetching the official schedule in XML format, transforming it into a more readable format and displaying it here.
+            I am not affiliated with Eurofurence, this is just a personal project that I wanted to share with the community.
           </Typography>
         </Box>
       </Modal>
