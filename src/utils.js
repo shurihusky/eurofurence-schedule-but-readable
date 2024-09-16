@@ -70,9 +70,7 @@ function getAvailableRooms(events) {
   events.forEach(event => {
     rooms.add(event.room);
   });
-  let availableRooms = Array.from(rooms);
-  console.log("availableRooms", availableRooms);
-  return availableRooms;
+  return Array.from(rooms);;
 }
 
 
@@ -100,53 +98,53 @@ function getDateOfDay(day) {
  */
 function getBuilding(room) {
   if (room === undefined) return "idk man, something went wrong";
-  if (room.includes("Lobby")) return "CCH - Entrance";
-  if (room.includes("Check-In 1")) return "CCH - Entrance";
-  if (room.includes("Check-In 2")) return "CCH - Entrance";
-  if (room.includes("Outdoor")) return "CCH - Entrance";
-  if (room.includes("Hall H")) return "CCH - Ground Floor";
-  if (room.includes("Hall 3")) return "CCH - Ground Floor";
-  if (room.includes("Hall 4")) return "CCH - Ground Floor";
-  if (room.includes("Foyer 4")) return "CCH - Ground Floor";
-  if (room.includes("3+H")) return "CCH - Ground Floor";
-  if (room.includes("Elbe")) return "CCH - Ground Floor";
-  if (room.includes(" X")) return "CCH - 1st Floor";
-  if (room.includes("Hall A")) return "CCH - 1st Floor";
-  if (room.includes("Hall B")) return "CCH - 1st Floor";
-  if (room.includes("Hall C")) return "CCH - 1st Floor";
-  if (room.includes("Hall 5")) return "CCH - 1st Floor";
-  if (room.includes("Hall 6")) return "CCH - 1st Floor";
-  if (room.includes("Hall 7")) return "CCH - 1st Floor";
-  if (room.includes("Hall 8")) return "CCH - 1st Floor";
-  if (room.includes("Hall 9")) return "CCH - 1st Floor";
-  if (room.includes("Hall 10")) return "CCH - 1st Floor";
-  if (room.includes("Cloak")) return "CCH - 1st Floor";
-  if (room.includes(" Y")) return "CCH - 2nd Floor";
-  if (room.includes("Hall D")) return "CCH - 2nd Floor";
-  if (room.includes("Hall E")) return "CCH - 2nd Floor";
-  if (room.includes("Hall F")) return "CCH - 2nd Floor";
-  if (room.includes("Hall G")) return "CCH - 2nd Floor";
-  if (room.includes("Hall 1")) return "CCH - 2nd Floor";
-  if (room.includes("Rooftop Garden")) return "CCH - 2nd Floor";
-  if (room.includes(" Z")) return "CCH - 3rd Floor";
-  if (room.includes("Alster")) return "CCH - 3rd Floor";
-  if (room.includes("Hall Z")) return "CCH - 3rd Floor";
+  if (room.includes("Outdoor")) return "Outdoor";
+  if (room.includes("Lobby")) return "Ground Floor";
+  if (room.includes("Check-In 1")) return "Ground Floor";
+  if (room.includes("Check-In 2")) return "Ground Floor";
+  if (room.includes("Hall H")) return "Ground Floor";
+  if (room.includes("Hall 3")) return "Ground Floor";
+  if (room.includes("Hall 4")) return "Ground Floor";
+  if (room.includes("Foyer 4")) return "Ground Floor";
+  if (room.includes("3+H")) return "Ground Floor";
+  if (room.includes("Elbe")) return "Ground Floor";
+  if (room.includes("Entrance")) return "Ground Floor";
+  if (room.includes("Entrace")) return "Ground Floor";
+  if (room.includes(" X")) return "1st Floor";
+  if (room.includes("Hall A")) return "1st Floor";
+  if (room.includes("Hall B")) return "1st Floor";
+  if (room.includes("Hall C")) return "1st Floor";
+  if (room.includes("Hall 5")) return "1st Floor";
+  if (room.includes("Hall 6")) return "1st Floor";
+  if (room.includes("Hall 7")) return "1st Floor";
+  if (room.includes("Hall 8")) return "1st Floor";
+  if (room.includes("Hall 9")) return "1st Floor";
+  if (room.includes("Hall 10")) return "1st Floor";
+  if (room.includes("Cloak")) return "1st Floor";
+  if (room.includes(" Y")) return "2nd Floor";
+  if (room.includes("Hall D")) return "2nd Floor";
+  if (room.includes("Hall E")) return "2nd Floor";
+  if (room.includes("Hall F")) return "2nd Floor";
+  if (room.includes("Hall G")) return "2nd Floor";
+  if (room.includes("Hall 1")) return "2nd Floor";
+  if (room.includes("Rooftop Garden")) return "2nd Floor";
+  if (room.includes(" Z")) return "3rd Floor";
+  if (room.includes("Alster")) return "3rd Floor";
+  if (room.includes("Hall Z")) return "3rd Floor";
   if (room.includes("Summerboat")) return "Other"
 
   return "idk man, something went wrong";
 }
 
 const buildingResources = [
-  { id: "CCH - Ground Floor", title: "CCH - Ground Floor", childrenKeys: ["Hall H", "Hall 3", "Hall 4", "Foyer 4", "3+H", "Elbe"] },
-  { id: "CCH - 1st Floor", title: "CCH - 1st Floor", childrenKeys: ["Hall A", "Hall B", "Hall C", "Hall 5", "Hall 6", "Hall 7", "Hall 8", "Hall 9", "Hall 10", "Cloak"] },
-  { id: "CCH - 2nd Floor", title: "CCH - 2nd Floor", childrenKeys: ["Hall D", "Hall E", "Hall F", "Hall G", "Hall 1", "Rooftop Garden"] },
-  { id: "CCH - 3rd Floor", title: "CCH - 3rd Floor", childrenKeys: ["Alster", "Hall Z"] },
-  { id: "CCH - Entrance", title: "CCH - Entrance", childrenKeys: ["Lobby", "Check-In 1", "Check-In 2", "Outdoor"] },
+  { id: "Ground Floor", title: "Ground Floor", childrenKeys: ["Hall H", "Hall 3", "Hall 4", "Foyer 4", "3+H", "Elbe", "Lobby", "Check-In 1", "Check-In 2", "Outdoor", "Entrance", "Entrace"] },
+  { id: "1st Floor", title: "1st Floor", childrenKeys: ["Hall A", "Hall B", "Hall C", "Hall 5", "Hall 6", "Hall 7", "Hall 8", "Hall 9", "Hall 10", "Cloak"] },
+  { id: "2nd Floor", title: "2nd Floor", childrenKeys: ["Hall D", "Hall E", "Hall F", "Hall G", "Hall 1", "Rooftop Garden"] },
+  { id: "3rd Floor", title: "3rd Floor", childrenKeys: ["Alster", "Hall Z"] },
   { id: "Other", title: "Other", childrenKeys: ["Summerboat"] }
 ]
 
 const enrichBuildingResources = (availableRooms) => {
-  console.log("availableRooms", availableRooms);
   const enrichedResources = buildingResources.map(floor => {
     const enrichedChildren = [];
 
@@ -163,7 +161,8 @@ const enrichBuildingResources = (availableRooms) => {
     };
   });
 
-  return enrichedResources;
+  // remove empty floors
+  return enrichedResources.filter(floor => floor.children.length > 0);
 };
 
 function getEarliestStartTime(events) {
@@ -217,8 +216,17 @@ function getSimplerEventGroupList() {
   return ["EF", "Social", "Stage", "Music", "Fursuit", "Creative", "Games", "Other"];
 }
 
+function getSimplerEventGroupListStart() {
+  return ["EF", "Social", "Stage", "Music", "Fursuit", "Creative", "Games", "Other"];
+}
+
 function getSimplerEventGrouping(event) {
   if (!event || !event.track) return "Other";
+  // some special cases that don't fit the pattern in my opinion
+  if (event.title === "Artists' Lounge") return "EF";
+  if (event.title === "Fursuit Lounge") return "EF";
+
+  // generic regrouping of events
   if (event.track === "EF-Services") return "EF";
   if (event.track === "Guest of Honor") return "Social";
   if (event.track === "Charity") return "Stage";
@@ -241,26 +249,40 @@ function getSimplerEventGrouping(event) {
 }
 
 function getSimpleEventColors(eventgroup) {
-  if (eventgroup === "EF") return "#808080";
-  if (eventgroup === "Social") return "#00BFFF";
-  if (eventgroup === "Stage") return "#FF4500";
-  if (eventgroup === "Music") return "#FF6347";
-  if (eventgroup === "Fursuit") return "#FFA07A";
-  if (eventgroup === "Creative") return "#7FFF00";
-  if (eventgroup === "Games") return "#FFD700";
-  if (eventgroup === "Other") return "#FF69B4";
+  if (eventgroup === "EF") return "#D1C5C0";
+  if (eventgroup === "Social") return "#9370DB";
+  if (eventgroup === "Stage") return "#37EBF3";
+  if (eventgroup === "Music") return "#710000";
+  if (eventgroup === "Fursuit") return "#1AC5B0";
+  if (eventgroup === "Creative") return "#E455AE";
+  if (eventgroup === "Games") return "#FDF500";
+  if (eventgroup === "Other") return "#CB1DCD";
 }
 
 const groups = [
-  { name: "EF", color: "#808080" },
-  { name: "Social", color: "#00BFFF" },
-  { name: "Stage", color: "#FF4500" },
-  { name: "Music", color: "#FF6347" },
-  { name: "Fursuit", color: "#FFA07A" },
-  { name: "Creative", color: "#7FFF00" },
-  { name: "Games", color: "#FFD700" },
-  { name: "Other", color: "#FF69B4" },
+  { name: "EF", color: "#D1C5C0", contrastColor: "#000000" },
+  { name: "Social", color: "#9370DB", contrastColor: "#000000" },
+  { name: "Stage", color: "#37EBF3", contrastColor: "#000000" },
+  { name: "Music", color: "#710000", contrastColor: "#FFFFFF" },
+  { name: "Fursuit", color: "#1AC5B0", contrastColor: "#000000" },
+  { name: "Creative", color: "#E455AE", contrastColor: "#000000" },
+  { name: "Games", color: "#FDF500", contrastColor: "#000000" },
+  { name: "Other", color: "#CB1DCD", contrastColor: "#FFFFFF" },
 ]
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+const getGroup = (name) => groups.find(group => group.name === name);
 
 const getWeekdayFromDate = (date) => new Date(date).toLocaleDateString('en-US', { weekday: 'short' })
 
@@ -277,8 +299,11 @@ export {
   getLatestEndTime,
   formatTimeForCalendar,
   getSimplerEventGroupList,
+  getSimplerEventGroupListStart,
   getSimplerEventGrouping,
   getSimpleEventColors,
   groups,
+  getGroup,
   getWeekdayFromDate,
+  modalStyle,
 };

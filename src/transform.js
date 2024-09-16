@@ -1,81 +1,10 @@
-import { formatDuration, calculateEndTime, getPreviousDay, getWeekdayFromDate } from './utils.js';
+import { calculateEndTime, getPreviousDay, getWeekdayFromDate } from './utils.js';
 
 /**
  * The base URL for event details.
  * @type {string}
  */
 const eventDetailsBaseUrl = "https://www.eurofurence.org/EF28/schedule/events/";
-
-/**
- * Parses the event data from the provided page HTML.
- * 
- * @param {string} pageHTML - The HTML content of the page.
- * @returns {Array} - An array of event objects.
- */
-function parseEventData(pageHTML) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(pageHTML, 'text/html');
-
-  const dayName = doc.querySelector('#schedule h1').textContent.trim().split(' ')[1];
-  const roomHeaders = Array.from(doc.querySelectorAll('#schedule thead th')).slice(1).map(th => th.textContent.trim());
-
-  const events = [];
-  const timeSlots = doc.querySelectorAll('#schedule tbody tr');
-
-  // Array to keep track of the remaining rowspan for each column
-  const roomSpans = new Array(roomHeaders.length).fill(0);
-
-  timeSlots.forEach(timeSlot => {
-    const time = timeSlot.querySelector('.time').textContent.trim();
-    const rooms = timeSlot.querySelectorAll('.room');
-
-    let roomIndex = 0;
-
-    rooms.forEach((room, index) => {
-      // Find the next available room index
-      while (roomSpans.length > 1 && roomIndex < roomSpans.length && roomSpans[roomIndex] > 0) {
-        roomSpans[roomIndex]--;
-        roomIndex++;
-      }
-
-      if (!room.classList.contains('empty')) {
-        const titleElement = room.querySelector('.title a');
-        const title = titleElement ? titleElement.textContent.trim() : '';
-        let link = titleElement ? eventDetailsBaseUrl + titleElement.href : '';
-        link = eventDetailsBaseUrl + link.substring(link.indexOf("events/")); const subtitle = room.querySelector('.subtitle a') ? room.querySelector('.subtitle a').textContent.trim() : '';
-        const speakers = Array.from(room.querySelectorAll('.speakers li a')).map(speaker => speaker.textContent.trim());
-        const language = room.querySelector('.language-info .language') ? room.querySelector('.language-info .language').textContent.trim() : '';
-        const type = room.querySelector('.type-info .type') ? room.querySelector('.type-info .type').textContent.trim() : '';
-        const track = room.querySelector('.track-info .track') ? room.querySelector('.track-info .track').textContent.trim() : '';
-        const duration = room.getAttribute('rowspan') ? parseInt(room.getAttribute('rowspan')) * 30 : 0;
-
-        events.push({
-          day: dayName,
-          time,
-          room: roomHeaders[roomIndex],
-          title,
-          link,
-          subtitle,
-          speakers,
-          language,
-          type,
-          track,
-          duration: formatDuration(duration),
-          endTime: calculateEndTime(time, duration) // Calculate and add end time
-        });
-
-        // Update the roomSpans array with the rowspan value
-        if (room.getAttribute('rowspan')) {
-          roomSpans[roomIndex] = parseInt(room.getAttribute('rowspan')) - 1;
-        }
-      }
-
-      roomIndex++;
-    });
-  });
-
-  return events;
-}
 
 /**
  * Parses the event data from the provided event XML.
@@ -199,4 +128,4 @@ function reboxDays(allEvents) {
   return dayMap;
 }
 
-export { parseEventData, parseEventXMLData, reboxDays };
+export { parseEventXMLData, reboxDays };

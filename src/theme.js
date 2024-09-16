@@ -6,13 +6,13 @@ const theme = createTheme({
     palette: {
         mode: 'dark',
         background: {
-            default: '#000',
+            default: '#272932',
         },
         primary: {
-            main: '#d4a8d2',
+            main: '#D1C5C0',
         },
         secondary: {
-            main: '#19857b',
+            main: '#710000',
         },
         error: {
             main: red.A400,
@@ -21,6 +21,25 @@ const theme = createTheme({
     typography: {
         allVariants: {
             lineHeight: 1,
+        },
+        overline: {
+            fontSize: '0.5rem',
+            '@media (min-width:600)': {
+                fontSize: '0.6rem',
+            },
+            '@media (min-width:800px)': {
+                fontSize: '0.8rem',
+            }
+        }
+    },
+    components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    backgroundColor: "#2F0743",
+                    backgroundImage: "linear-gradient(to bottom, #190424, #2F0743)",
+                },
+            },
         },
     }
 });
