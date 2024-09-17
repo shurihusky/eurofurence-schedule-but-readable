@@ -123,7 +123,7 @@ const App = () => {
   useEffect(() => {
     // console.log("Filtered Groups: ", filteredGroups);
     // fetch('http://localhost:3001/fetch-events')
-    fetch('https://schedcache.shuri.dev')
+    fetch('https://schedcache.shuri.dev/fetch-events')
       // fetch('http://192.168.178.66:5001/fetch-events')
       .then(response => {
         if (!response.ok) {
